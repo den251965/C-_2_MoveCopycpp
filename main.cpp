@@ -1,8 +1,10 @@
 #include <iostream>
 #include <set>
+#include <tuple>
 #include <vector>
 
 #include "testcllass.h"
+
 
 int main() {
   {
@@ -73,13 +75,18 @@ int main() {
     struct klin {
       int olo = 0;
       std::string ghj = "";
+
+      bool operator<(const klin& rhs) const noexcept {
+        std::cout << "operator pereopredelen < \n";
+        return std::tie(olo, ghj) < std::tie(rhs.olo, rhs.ghj);
+      }
     };
 
     klin ts({.olo = 12, .ghj = "read"});
 
     TestObj<klin> struct_test(ts);
     std::vector<TestObj<klin>> vec;
- std::cout << "std::vector<TestObj<klin>> vec ----------------------  " << "\n";
+    std::cout << "std::vector<TestObj<klin>> vec ----------------------  " << "\n";
     vec.push_back(klin{.olo = 15, .ghj = "second"});
     vec.push_back(klin{.olo = 17, .ghj = "zara"});
     vec.push_back(klin{.olo = 14, .ghj = "first"});
@@ -90,6 +97,22 @@ int main() {
       std::cout << m.get()->olo << " " << m.get()->ghj << "\n";
     }
     std::cout << "\n";
+
+    std::cout << "---------------------------------  " << "\n";
+    {
+      std::cout << " std::set<TestObj<int>> sec \n";
+      std::set<TestObj<klin>> sec;
+      sec.insert(klin{.olo = 14, .ghj = "first"});
+      sec.insert(klin{.olo = 16, .ghj = "dom"});
+      sec.insert(klin{.olo = 12, .ghj = "second"});
+      sec.insert(klin{.olo = 120, .ghj = "latte"});
+      sec.insert(klin{.olo = 12, .ghj = "second"});
+      std::cout << " print set \n";
+      for (auto& m : sec) {
+        std::cout << m.get()->olo << " " << m.get()->ghj << "\n";
+      }
+      std::cout << "\n";
+    }
   }
   std::cout << "Succeses!!!\n";
   return 0;
